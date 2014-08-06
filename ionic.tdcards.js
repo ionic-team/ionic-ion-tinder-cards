@@ -261,9 +261,9 @@
   });
 
 
-  angular.module('ionic.contrib.ui.cards', ['ionic'])
+  angular.module('ionic.contrib.ui.tinderCards', ['ionic'])
 
-  .directive('swipeCard', ['$timeout', function($timeout) {
+  .directive('tdCard', ['$timeout', function($timeout) {
     return {
       restrict: 'E',
       template: '<div class="swipe-card" ng-transclude></div>',
@@ -301,10 +301,10 @@
     }
   }])
 
-  .directive('swipeCards', ['$rootScope', function($rootScope) {
+  .directive('tdCards', ['$rootScope', function($rootScope) {
     return {
       restrict: 'E',
-      template: '<div class="swipe-cards" ng-transclude></div>',
+      template: '<div class="td-cards" ng-transclude></div>',
       replace: true,
       transclude: true,
       scope: {},
@@ -312,7 +312,7 @@
         var swipeController = new SwipeableCardController({
         });
 
-        $rootScope.$on('swipeCard.pop', function(isAnimated) {
+        $rootScope.$on('tdCard.pop', function(isAnimated) {
           swipeController.popCard(isAnimated);
         });
 
@@ -321,10 +321,10 @@
     }
   }])
 
-  .factory('$ionicSwipeCardDelegate', ['$rootScope', function($rootScope) {
+  .factory('TDCardDelegate', ['$rootScope', function($rootScope) {
     return {
       popCard: function($scope, isAnimated) {
-        $rootScope.$emit('swipeCard.pop', isAnimated);
+        $rootScope.$emit('tdCard.pop', isAnimated);
       },
       getSwipebleCard: function($scope) {
         return $scope.$parent.swipeCard;

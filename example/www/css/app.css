@@ -8,7 +8,7 @@
 }
 
 .pane {
-  background-color: #333;
+  background-color: #efefef;
 }
 
 .bar.bar-transparent {
@@ -18,14 +18,13 @@
 }
 
 .bar .title {
-  color: #eee;
 }
 
-.swipe-cards {
+.td-cards {
   position: fixed;
 }
 
-.swipe-card {
+.td-card {
   display: none;
   position: fixed;
   -webkit-transform: scale(1,1);
@@ -42,20 +41,20 @@
   -webkit-animation-fill-mode: forwards;
 }
 
-.swipe-card .title {
+.td-card .title {
   height: 40px;
   padding: 5px;
   line-height: 30px;
   color: #444;
 }
-.swipe-card .image {
+.td-card .image {
   overflow: hidden;
   max-height: 210px;
 }
-.swipe-card .button {
+.td-card .button {
   border: none;
 }
-.swipe-card .image img {
+.td-card .image img {
   width: 100%;
   border-radius: 0px 0px 4px 4px;
 }
@@ -92,9 +91,9 @@
   }
 }
 
-.swipe-card.pop-in-start {
+.td-card.pop-in-start {
   -webkit-transform: scale(0,0);
 }
-.swipe-card.pop-in {
+.td-card.pop-in {
   -webkit-animation: bounceIn 0.4s ease-out;
 }

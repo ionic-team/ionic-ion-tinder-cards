@@ -19,7 +19,7 @@
 
     <!-- your app's script -->
     <script src="example/www/js/app.js"></script>
-    <script src="ionic.swipecards.js"></script>
+    <script src="ionic.tdcards.js"></script>
   </head>
 
   <!-- 
@@ -27,12 +27,12 @@
   -->
   <body ng-app="starter" animation="slide-left-right-ios7" no-scroll>
     <ion-pane ng-controller="CardsCtrl">
-      <ion-header-bar class="bar-transparent">
-        <h1 class="title">Tinder Cards</h1>
+      <ion-header-bar class="bar-default">
+        <h1 class="title">TD Cards</h1>
       </ion-header-bar>
 
-      <tinder-cards>
-        <tinder-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
+      <td-cards>
+        <td-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-card-swipe="cardSwiped($index)">
           <div ng-controller="CardCtrl">
             <div class="card">
               <div class="card-body">
@@ -45,8 +45,8 @@
                 </div>
               </div>
           </div>
-        </tinder-card>
-      </tinder-cards>
+        </td-card>
+      </td-cards>
     </ion-pane>
   </body>
 </html>
