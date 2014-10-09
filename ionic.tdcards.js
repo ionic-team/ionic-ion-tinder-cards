@@ -180,20 +180,30 @@
 
       var targetX = -this.width;
       if(this.x > 0) {
-        targetX = 300;//this.parentWidth + this.width;
+        targetX = (this.parentWidth / 2) + (this.width);;
       }
 
       // Fly out
-      var rotateTo = (this.rotationAngle + (this.rotationDirection * 0.2));// || (Math.random() * 0.4);
+      var rotateTo = this.rotationAngle;//(this.rotationAngle this.rotationDirection * 0.2));// || (Math.random() * 0.4);
+      console.log('Rotating to', rotateTo);
+      console.log(targetX, this.y, rotateTo);
       var duration = this.rotationAngle ? 0.2 : 0.5;
-      this.el.style[TRANSITION] = '-webkit-transform 1s ease-in-out';
-      this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + targetX + 'px, ' + this.y + 'px, 0)';// rotate(' + rotateTo + 'rad)';
+      //this.el.style[TRANSITION] = '-webkit-transform 50s ease-in-out';
+      console.log('DO DRAG END');
+
+      ionic.requestAnimationFrame(function() { 
+        self.el.style['webkitTransition'] = 'all 1s ease-in-out';
+        //this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + targetX + 'px, ' + this.y + 'px, 0) rotate(' + rotateTo + 'rad)';
+        self.el.style['webkitTransform'] = 'translate3d(' + targetX + 'px, ' + self.y + 'px, 0) rotate(' + rotateTo + 'rad)';
+      });
       //this.onSwipe && this.onSwipe();
 
       // Trigger destroy after card has swiped out
+      /*
       setTimeout(function() {
         self.onDestroy && self.onDestroy();
       }, duration * 1000);
+      */
     },
 
     /**
@@ -257,6 +267,7 @@
 
       this.thresholdAmount = (this.x / (this.parentWidth/2));
 
+      console.log('DO DRAG');
       var self = this;
       setTimeout(function() {
         self.onPartialSwipe(self.thresholdAmount);
