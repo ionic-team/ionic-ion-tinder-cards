@@ -90,6 +90,9 @@
 
       this.el = opts.el;
 
+      this.parentWidth = this.el.parentNode.offsetWidth;
+      this.width = this.el.offsetWidth;
+
       this.startX = this.startY = this.x = this.y = 0;
 
       this.bindEvents();
@@ -175,25 +178,22 @@
     transitionOut: function() {
       var self = this;
 
-      if(this.y < 0) {
-        this.el.style[TRANSITION] = '-webkit-transform 0.2s ease-in-out';
-        this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + this.x + ',' + (this.startY) + 'px, 0)';
-        setTimeout(function() {
-          self.el.style[TRANSITION] = 'none';
-        }, 200);
-      } else {
-        // Fly out
-        var rotateTo = (this.rotationAngle + (this.rotationDirection * 0.6)) || (Math.random() * 0.4);
-        var duration = this.rotationAngle ? 0.2 : 0.5;
-        this.el.style[TRANSITION] = '-webkit-transform ' + duration + 's ease-in-out';
-        this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + this.x + ',' + (window.innerHeight * 1.5) + 'px, 0) rotate(' + rotateTo + 'rad)';
-        this.onSwipe && this.onSwipe();
-
-        // Trigger destroy after card has swiped out
-        setTimeout(function() {
-          self.onDestroy && self.onDestroy();
-        }, duration * 1000);
+      var targetX = -this.width;
+      if(this.x > 0) {
+        targetX = 300;//this.parentWidth + this.width;
       }
+
+      // Fly out
+      var rotateTo = (this.rotationAngle + (this.rotationDirection * 0.2));// || (Math.random() * 0.4);
+      var duration = this.rotationAngle ? 0.2 : 0.5;
+      this.el.style[TRANSITION] = '-webkit-transform 1s ease-in-out';
+      this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + targetX + 'px, ' + this.y + 'px, 0)';// rotate(' + rotateTo + 'rad)';
+      //this.onSwipe && this.onSwipe();
+
+      // Trigger destroy after card has swiped out
+      setTimeout(function() {
+        self.onDestroy && self.onDestroy();
+      }, duration * 1000);
     },
 
     /**
@@ -255,9 +255,15 @@
       this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + this.x + 'px, ' + this.y  + 'px, 0) rotate(' + (this.rotationAngle || 0) + 'rad)';
 
 
+      this.thresholdAmount = (this.x / (this.parentWidth/2));
+
+      var self = this;
+      setTimeout(function() {
+        self.onPartialSwipe(self.thresholdAmount);
+      });
     },
     _doDragEnd: function(e) {
-      //this.transitionOut(e);
+      this.transitionOut(e);
     }
   });
 
@@ -271,7 +277,9 @@
       require: '^tdCards',
       transclude: true,
       scope: {
-        onCardSwipe: '&',
+        onSwipeLeft: '&',
+        onSwipeRipe: '&',
+        onPartialSwipe: '&',
         onDestroy: '&'
       },
       compile: function(element, attr) {
@@ -281,6 +289,11 @@
           // Instantiate our card view
           var swipeableCard = new SwipeableCardView({
             el: el,
+            onPartialSwipe: function(amt) {
+              $timeout(function() {
+                $scope.onPartialSwipe({amt: amt});
+              });
+            },
             onSwipeRight: function() {
               $timeout(function() {
                 $scope.onSwipeRight();

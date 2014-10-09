@@ -26,8 +26,22 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
 
   $scope.cards = Array.prototype.slice.call(cardTypes, 0);
 
-  $scope.cardSwiped = function(index) {
-    $scope.addCard();
+  $scope.cardSwipedLeft = function(index) {
+    console.log('LEFT SWIPE');
+    //$scope.addCard();
+  };
+  $scope.cardSwipedRight = function(index) {
+    console.log('RIGHT SWIPE');
+    //$scope.addCard();
+  };
+
+  $scope.cardPartialSwipe = function(amt) {
+    $scope.leftTextOpacity = {
+      'opacity': amt > 0 ? amt : 0
+    };
+    $scope.rightTextOpacity = {
+      'opacity': amt < 0 ? Math.abs(amt) : 0
+    };
   };
 
   $scope.cardDestroyed = function(index) {
