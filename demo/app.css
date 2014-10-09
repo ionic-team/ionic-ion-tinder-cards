@@ -37,3 +37,9 @@ td-card img {
   color: rgb(255, 115, 115);
   opacity: 0;
 }
+
+.fade {
+  -webkit-transition: 0.2s opacity linear;
+  transition: 0.2s opacity linear;
+  opacity: 0;
+}

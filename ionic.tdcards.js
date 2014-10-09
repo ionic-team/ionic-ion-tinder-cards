@@ -172,11 +172,19 @@
       this.transitionOut();
     },
 
+    isUnderThreshold: function() {
+      return true;
+    },
     /**
      * Fly the card out or animate back into resting position.
      */
     transitionOut: function() {
       var self = this;
+
+      if(this.isUnderThreshold()) {
+        self.onSnapBack();
+        return;
+      }
 
       var targetX = -this.width;
       if(this.x > 0) {
@@ -291,6 +299,7 @@
         onSwipeLeft: '&',
         onSwipeRipe: '&',
         onPartialSwipe: '&',
+        onSnapBack: '&',
         onDestroy: '&'
       },
       compile: function(element, attr) {
@@ -318,6 +327,11 @@
             onDestroy: function() {
               $timeout(function() {
                 $scope.onDestroy();
+              });
+            },
+            onSnapBack: function() {
+              animateSpringViaCss(el, 0, 0.5, 50, 700, 10, function (x) {
+                el.style.transform = el.style.webkitTransform = 'translate3d(0,0,0)';
               });
             },
           });
