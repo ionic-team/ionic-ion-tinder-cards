@@ -245,7 +245,7 @@
     },
 
     _doDrag: function(e) {
-      var o = e.gesture.deltaX / 1000;
+      var o = e.gesture.deltaX / -1000;
 
       this.rotationAngle = Math.atan(o);
 
@@ -253,6 +253,8 @@
       this.y = this.startY + (e.gesture.deltaY * 0.8);
 
       this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + this.x + 'px, ' + this.y  + 'px, 0) rotate(' + (this.rotationAngle || 0) + 'rad)';
+
+
     },
     _doDragEnd: function(e) {
       //this.transitionOut(e);

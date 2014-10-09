@@ -14,4 +14,5 @@ td-card {
 
 td-card img {
   max-width: 100%;
+  border-radius: 6px;
 }
