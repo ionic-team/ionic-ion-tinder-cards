@@ -15,16 +15,16 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
 .controller('CardsCtrl', function($scope, TDCardDelegate) {
   console.log('CARDS CTRL');
   var cardTypes = [
-    { title: 'Swipe down to clear the card', image: 'img/pic.png' },
+    { image: 'max.jpg' },
+/*
     { title: 'Where is this?', image: 'img/pic.png' },
     { title: 'What kind of grass is this?', image: 'img/pic2.png' },
     { title: 'What beach is this?', image: 'img/pic3.png' },
     { title: 'What kind of clouds are these?', image: 'img/pic4.png' }
+    */
   ];
 
-  $scope.cards = Array.prototype.slice.call(cardTypes, 0, 0);
-
-  console.log('Cards', $scope.cards);
+  $scope.cards = Array.prototype.slice.call(cardTypes, 0);
 
   $scope.cardSwiped = function(index) {
     $scope.addCard();
@@ -41,9 +41,9 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
   }
 })
 
-.controller('CardCtrl', function($scope, $ionicSwipeCardDelegate) {
+.controller('CardCtrl', function($scope, TDCardDelegate) {
   $scope.goAway = function() {
-    var card = $ionicSwipeCardDelegate.getSwipebleCard($scope);
+    var card = TDCardDelegate.getSwipebleCard($scope);
     card.swipe();
   };
 });

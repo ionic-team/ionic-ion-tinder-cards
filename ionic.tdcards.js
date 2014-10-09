@@ -23,7 +23,7 @@
     }
   }
 
-  var SwipeableCardController = ionic.controllers.ViewController.inherit({
+  var SwipeableCardController = ionic.views.View.inherit({
     initialize: function(opts) {
       this.cards = [];
 
@@ -202,12 +202,14 @@
     bindEvents: function() {
       var self = this;
       ionic.onGesture('dragstart', function(e) {
+        /*
         var cx = window.innerWidth / 2;
         if(e.gesture.touches[0].pageX < cx) {
           self._transformOriginRight();
         } else {
           self._transformOriginLeft();
         }
+        */
         ionic.requestAnimationFrame(function() { self._doDragStart(e) });
       }, this.el);
 
@@ -243,20 +245,17 @@
     },
 
     _doDrag: function(e) {
-      var o = e.gesture.deltaY / 3;
+      var o = e.gesture.deltaX / 1000;
 
-      this.rotationAngle = Math.atan(o/this.touchDistance) * this.rotationDirection;
+      this.rotationAngle = Math.atan(o);
 
-      if(e.gesture.deltaY < 0) {
-        this.rotationAngle = 0;
-      }
-
-      this.y = this.startY + (e.gesture.deltaY * 0.4);
+      this.x = this.startX + (e.gesture.deltaX * 0.8);
+      this.y = this.startY + (e.gesture.deltaY * 0.8);
 
       this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + this.x + 'px, ' + this.y  + 'px, 0) rotate(' + (this.rotationAngle || 0) + 'rad)';
     },
     _doDragEnd: function(e) {
-      this.transitionOut(e);
+      //this.transitionOut(e);
     }
   });
 
@@ -267,8 +266,7 @@
     return {
       restrict: 'E',
       template: '<div class="swipe-card" ng-transclude></div>',
-      require: '^swipeCards',
-      replace: true,
+      require: '^tdCards',
       transclude: true,
       scope: {
         onCardSwipe: '&',
@@ -281,9 +279,14 @@
           // Instantiate our card view
           var swipeableCard = new SwipeableCardView({
             el: el,
-            onSwipe: function() {
+            onSwipeRight: function() {
               $timeout(function() {
-                $scope.onCardSwipe();
+                $scope.onSwipeRight();
+              });
+            },
+            onSwipeLeft: function() {
+              $timeout(function() {
+                $scope.onSwipeLeft();
               });
             },
             onDestroy: function() {
@@ -305,7 +308,6 @@
     return {
       restrict: 'E',
       template: '<div class="td-cards" ng-transclude></div>',
-      replace: true,
       transclude: true,
       scope: {},
       controller: function($scope, $element) {
