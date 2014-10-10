@@ -182,7 +182,7 @@
       var self = this;
 
       if(this.isUnderThreshold()) {
-        self.onSnapBack();
+        self.onSnapBack(this.x, this.y, this.rotationAngle);
         return;
       }
 
@@ -199,11 +199,6 @@
       //this.el.style[TRANSITION] = '-webkit-transform 50s ease-in-out';
       console.log('DO DRAG END');
 
-      ionic.requestAnimationFrame(function() { 
-        self.el.style['webkitTransition'] = 'all 1s ease-in-out';
-        //this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + targetX + 'px, ' + this.y + 'px, 0) rotate(' + rotateTo + 'rad)';
-        self.el.style['webkitTransform'] = 'translate3d(' + targetX + 'px, ' + self.y + 'px, 0) rotate(' + rotateTo + 'rad)';
-      });
       //this.onSwipe && this.onSwipe();
 
       // Trigger destroy after card has swiped out
@@ -228,6 +223,7 @@
           self._transformOriginLeft();
         }
         */
+        console.log('DRAG START');
         ionic.requestAnimationFrame(function() { self._doDragStart(e) });
       }, this.el);
 
@@ -270,12 +266,12 @@
       this.x = this.startX + (e.gesture.deltaX * 0.8);
       this.y = this.startY + (e.gesture.deltaY * 0.8);
 
-      this.el.style[ionic.CSS.TRANSFORM] = 'translate3d(' + this.x + 'px, ' + this.y  + 'px, 0) rotate(' + (this.rotationAngle || 0) + 'rad)';
+      this.el.style.transform = this.el.style.webkitTransform = 'translate3d(' + this.x + 'px, ' + this.y  + 'px, 0) rotate(' + (this.rotationAngle || 0) + 'rad)';
 
 
       this.thresholdAmount = (this.x / (this.parentWidth/2));
 
-      console.log('DO DRAG');
+      console.log('DO DRAG', str);
       var self = this;
       setTimeout(function() {
         self.onPartialSwipe(self.thresholdAmount);
@@ -329,10 +325,35 @@
                 $scope.onDestroy();
               });
             },
-            onSnapBack: function() {
+            onSnapBack: function(startX, startY, startRotation) {
+
+              var animation = collide.animation({
+                // 'linear|ease|ease-in|ease-out|ease-in-out|cubic-bezer(x1,y1,x2,y2)',
+                // or function(t, duration),
+                // or a dynamics configuration (see below)
+                duration: 500,
+                percent: 0,
+                reverse: false
+              })
+
+              .easing({
+                type: 'spring',
+                frequency: 15,
+                friction: 250,
+                initialForce: false
+              }) 
+
+              .on('step', function(v) {
+                //Have the element spring over 400px
+                el.style.transform = el.style.webkitTransform = 'translate3d(' + (startX - startX*v) + 'px, ' + (startY - startY*v) + 'px, 0) rotate(' + (startRotation - startRotation*v) + 'rad)';
+              })
+              .start();
+              /*
               animateSpringViaCss(el, 0, 0.5, 50, 700, 10, function (x) {
-                el.style.transform = el.style.webkitTransform = 'translate3d(0,0,0)';
+                console.log('Mapper', x);
+                return el.style.transform = el.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
               });
+              */
             },
           });
           $scope.$parent.swipeCard = swipeableCard;

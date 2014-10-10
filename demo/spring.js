@@ -105,14 +105,14 @@ var stdPrefixes = [
 
 function asCssRule(key, value, prefixes) {
   prefixes = prefixes || noPrefix;
-  return reduce(prefixes, function reduceRule(string, prefix) {
+  return reduce.call(prefixes, function reduceRule(string, prefix) {
     return string + prefix + key + ':' + value + ';';
   }, '');
 }
 
 function asCssStatement(identifier, cssString, prefixes) {
   prefixes = prefixes || noPrefix;
-  return reduce(prefixes, function (string, prefix) {
+  return reduce.call(prefixes, function (string, prefix) {
     return string + prefix + identifier +  '{' + cssString + '}';
   }, '');
 }
@@ -130,7 +130,7 @@ function generateAnimationCss(points, name, duration, mapper, prefixes) {
   var frameSize = 100 / (points.length - 1);
 
   // Build keyframe string
-  var keyframes = reduce(points, function(frames, point, i) {
+  var keyframes = reduce.call(points, function(frames, point, i) {
     // Create the percentage key for the frame. Round to nearest 5 decimals.
     var percent = roundTo(frameSize * i, 5);
     // Wrap the mapped point value in a keyframe. Mapper is expected to return
