@@ -173,12 +173,13 @@
     },
 
     isUnderThreshold: function() {
-      return true;
+      //return true;
+      return Math.abs(this.thresholdAmount) < 0.4;
     },
     /**
      * Fly the card out or animate back into resting position.
      */
-    transitionOut: function() {
+    transitionOut: function(e) {
       var self = this;
 
       if(this.isUnderThreshold()) {
@@ -186,17 +187,27 @@
         return;
       }
 
-      var targetX = -this.width;
+      var angle = Math.atan(e.gesture.deltaX / e.gesture.deltaY);
+      console.log('Finishing at angle', angle);
+
+      var dir = this.thresholdAmount < 0 ? -1 : 1;
+      var targetX;
       if(this.x > 0) {
-        targetX = (this.parentWidth / 2) + (this.width);;
+        targetX = (this.parentWidth / 2) + (this.width);
+      } else {
+        targetX = - (this.parentWidth + this.width);
       }
+      var targetY = targetX / Math.tan(angle);
 
       // Fly out
       var rotateTo = this.rotationAngle;//(this.rotationAngle this.rotationDirection * 0.2));// || (Math.random() * 0.4);
-      console.log('Rotating to', rotateTo);
+      console.log('Rotating to', rotateTo, e.gesture.velocityX, e.gesture.velocityY);
       console.log(targetX, this.y, rotateTo);
       var duration = this.rotationAngle ? 0.2 : 0.5;
-      //this.el.style[TRANSITION] = '-webkit-transform 50s ease-in-out';
+      ionic.requestAnimationFrame(function() {
+        self.el.style.transform = self.el.style.webkitTransform = 'translate3d(' + targetX + 'px, ' + targetY + 'px,0) rotate(' + self.rotationAngle + 'rad)';
+        self.el.style.transition = self.el.style.webkitTransition = 'all 0.3s ease-in-out';
+      });
       console.log('DO DRAG END');
 
       //this.onSwipe && this.onSwipe();
@@ -271,7 +282,6 @@
 
       this.thresholdAmount = (this.x / (this.parentWidth/2));
 
-      console.log('DO DRAG', str);
       var self = this;
       setTimeout(function() {
         self.onPartialSwipe(self.thresholdAmount);
@@ -326,6 +336,8 @@
               });
             },
             onSnapBack: function(startX, startY, startRotation) {
+              var leftText = el.querySelector('.yes-text');
+              var rightText = el.querySelector('.no-text');
 
               var animation = collide.animation({
                 // 'linear|ease|ease-in|ease-out|ease-in-out|cubic-bezer(x1,y1,x2,y2)',
@@ -346,6 +358,8 @@
               .on('step', function(v) {
                 //Have the element spring over 400px
                 el.style.transform = el.style.webkitTransform = 'translate3d(' + (startX - startX*v) + 'px, ' + (startY - startY*v) + 'px, 0) rotate(' + (startRotation - startRotation*v) + 'rad)';
+                rightText.style.opacity = Math.max(rightText.style.opacity - rightText.style.opacity * v, 0);
+                leftText.style.opacity = Math.max(leftText.style.opacity - leftText.style.opacity * v, 0);
               })
               .start();
               /*
