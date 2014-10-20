@@ -12,37 +12,28 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
 
 })
 
+.directive('noScroll', function($document) {
+
+  return {
+    restrict: 'A',
+    link: function($scope, $element, $attr) {
+
+      $document.on('touchmove', function(e) {
+        e.preventDefault();
+      });
+    }
+  }
+})
+
 .controller('CardsCtrl', function($scope, TDCardDelegate) {
   console.log('CARDS CTRL');
   var cardTypes = [
     { image: 'max.jpg' },
-/*
-    { title: 'Where is this?', image: 'img/pic.png' },
-    { title: 'What kind of grass is this?', image: 'img/pic2.png' },
-    { title: 'What beach is this?', image: 'img/pic3.png' },
-    { title: 'What kind of clouds are these?', image: 'img/pic4.png' }
-    */
+    { image: 'ben.png' },
+    { image: 'perry.jpg' },
   ];
 
   $scope.cards = Array.prototype.slice.call(cardTypes, 0);
-
-  $scope.cardSwipedLeft = function(index) {
-    console.log('LEFT SWIPE');
-    //$scope.addCard();
-  };
-  $scope.cardSwipedRight = function(index) {
-    console.log('RIGHT SWIPE');
-    //$scope.addCard();
-  };
-
-  $scope.cardPartialSwipe = function(amt) {
-    $scope.leftTextOpacity = {
-      'opacity': amt > 0 ? amt : 0
-    };
-    $scope.rightTextOpacity = {
-      'opacity': amt < 0 ? Math.abs(amt) : 0
-    };
-  };
 
   $scope.cardDestroyed = function(index) {
     $scope.cards.splice(index, 1);
@@ -56,8 +47,12 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
 })
 
 .controller('CardCtrl', function($scope, TDCardDelegate) {
-  $scope.goAway = function() {
-    var card = TDCardDelegate.getSwipebleCard($scope);
-    card.swipe();
+  $scope.cardSwipedLeft = function(index) {
+    console.log('LEFT SWIPE');
+    $scope.addCard();
+  };
+  $scope.cardSwipedRight = function(index) {
+    console.log('RIGHT SWIPE');
+    $scope.addCard();
   };
 });

@@ -23,61 +23,6 @@
     }
   }
 
-  var SwipeableCardController = ionic.views.View.inherit({
-    initialize: function(opts) {
-      this.cards = [];
-
-      var ratio = window.innerWidth / window.innerHeight;
-
-      this.maxWidth = window.innerWidth - (opts.cardGutterWidth || 0);
-      this.maxHeight = opts.height || 300;
-      this.cardGutterWidth = opts.cardGutterWidth || 10;
-      this.cardPopInDuration = opts.cardPopInDuration || 400;
-      this.cardAnimation = opts.cardAnimation || 'pop-in';
-    },
-    /**
-     * Push a new card onto the stack.
-     */
-    pushCard: function(card) {
-      var self = this;
-
-      this.cards.push(card);
-      this.beforeCardShow(card);
-
-      card.transitionIn(this.cardAnimation);
-      setTimeout(function() {
-        card.disableTransition(self.cardAnimation);
-      }, this.cardPopInDuration + 100);
-    },
-    /**
-     * Set up a new card before it shows.
-     */
-    beforeCardShow: function() {
-      var nextCard = this.cards[this.cards.length-1];
-      if(!nextCard) return;
-
-      // Calculate the top left of a default card, as a translated pos
-      var topLeft = window.innerHeight / 2 - this.maxHeight/2;
-      console.log(window.innerHeight, this.maxHeight);
-
-      var cardOffset = Math.min(this.cards.length, 3) * 5;
-
-      // Move each card 5 pixels down to give a nice stacking effect (max of 3 stacked)
-      nextCard.setPopInDuration(this.cardPopInDuration);
-      nextCard.setZIndex(this.cards.length);
-    },
-    /**
-     * Pop a card from the stack
-     */
-    popCard: function(animate) {
-      var card = this.cards.pop();
-      if(animate) {
-        card.swipe();
-      }
-      return card;
-    }
-  });
-
   var SwipeableCardView = ionic.views.View.inherit({
     /**
      * Initialize a card with the given options.
@@ -188,7 +133,7 @@
       }
 
       var angle = Math.atan(e.gesture.deltaX / e.gesture.deltaY);
-      console.log('Finishing at angle', angle);
+      console.log('Finishing at angle', angle, 'and velocity', e.gesture.velocityX, e.gesture.velocityY);
 
       var dir = this.thresholdAmount < 0 ? -1 : 1;
       var targetX;
@@ -197,27 +142,30 @@
       } else {
         targetX = - (this.parentWidth + this.width);
       }
+
+      // Target Y is just the "opposite" side of the triangle of targetX as the adjacent edge (sohcahtoa yo)
       var targetY = targetX / Math.tan(angle);
 
       // Fly out
       var rotateTo = this.rotationAngle;//(this.rotationAngle this.rotationDirection * 0.2));// || (Math.random() * 0.4);
-      console.log('Rotating to', rotateTo, e.gesture.velocityX, e.gesture.velocityY);
-      console.log(targetX, this.y, rotateTo);
-      var duration = this.rotationAngle ? 0.2 : 0.5;
+
+      var duration = 0.3 - Math.min(Math.max(Math.abs(e.gesture.velocityX)/10, 0.05), 0.2);
+      
+      //console.log(e.gesture.velocityX/2, duration);
+      console.log('Duration', duration);
+
       ionic.requestAnimationFrame(function() {
         self.el.style.transform = self.el.style.webkitTransform = 'translate3d(' + targetX + 'px, ' + targetY + 'px,0) rotate(' + self.rotationAngle + 'rad)';
-        self.el.style.transition = self.el.style.webkitTransition = 'all 0.3s ease-in-out';
+        self.el.style.transition = self.el.style.webkitTransition = 'all ' + duration + 's ease-in-out';
       });
       console.log('DO DRAG END');
 
       //this.onSwipe && this.onSwipe();
 
       // Trigger destroy after card has swiped out
-      /*
       setTimeout(function() {
         self.onDestroy && self.onDestroy();
       }, duration * 1000);
-      */
     },
 
     /**
@@ -259,17 +207,18 @@
     },
 
     _doDragStart: function(e) {
+      e.preventDefault();
       var width = this.el.offsetWidth;
       var point = window.innerWidth / 2 + this.rotationDirection * (width / 2)
       var distance = Math.abs(point - e.gesture.touches[0].pageX);// - window.innerWidth/2);
       console.log(distance);
 
       this.touchDistance = distance * 10;
-
-      console.log('Touch distance', this.touchDistance);//this.touchDistance, width);
     },
 
     _doDrag: function(e) {
+      e.preventDefault();
+
       var o = e.gesture.deltaX / -1000;
 
       this.rotationAngle = Math.atan(o);
@@ -316,7 +265,15 @@
           var swipeableCard = new SwipeableCardView({
             el: el,
             onPartialSwipe: function(amt) {
+              swipeCards.partial(amt);
               $timeout(function() {
+                $scope.leftTextOpacity = {
+                  'opacity': amt > 0 ? amt : 0
+                };
+                $scope.rightTextOpacity = {
+                  'opacity': amt < 0 ? Math.abs(amt) : 0
+                };
+
                 $scope.onPartialSwipe({amt: amt});
               });
             },
@@ -372,28 +329,65 @@
           });
           $scope.$parent.swipeCard = swipeableCard;
 
-          swipeCards.pushCard(swipeableCard);
-
         }
       }
     }
   }])
 
-  .directive('tdCards', ['$rootScope', function($rootScope) {
+  .directive('tdCards', ['$rootScope', '$timeout', function($rootScope, $timeout) {
     return {
       restrict: 'E',
       template: '<div class="td-cards" ng-transclude></div>',
       transclude: true,
       scope: {},
       controller: function($scope, $element) {
-        var swipeController = new SwipeableCardController({
+        var cards;
+        var firstCard, secondCard, thirdCard;
+
+        var existingCards, card;
+
+        var i, j;
+
+        var sortCards = function() {
+          existingCards = $element[0].querySelectorAll('td-card');
+          console.log('Existing', existingCards);
+
+          for(i = 0; i < existingCards.length; i++) {
+            card = existingCards[i];
+            if(!card) continue;
+            if(i > 0) {
+              card.style.transform = card.style.webkitTransform = 'translate3d(0, ' + (i * 4) + 'px, 0)';
+            }
+            card.style.zIndex = (existingCards.length - i);
+          }
+        };
+
+        $timeout(function() {
+          sortCards();
         });
 
-        $rootScope.$on('tdCard.pop', function(isAnimated) {
-          swipeController.popCard(isAnimated);
-        });
+        var bringCardUp = function(card, amt, max) {
+          var position, top, newTop;
+          position = card.style.transform || card.style.webkitTransform;
+          top = parseInt(position && position.split(',')[1] || 0);
+          //console.log(window.getComputedStyle(secondCard));
+          newTop = Math.max(0, Math.min(max, max - (max * Math.abs(amt))));
+          //console.log(top);
+          console.log(newTop);
+          card.style.transform = card.style.webkitTransform = 'translate3d(0, ' + newTop + 'px, 0)';
+        };
 
-        return swipeController;
+        this.partial = function(amt) {
+          cards = $element[0].querySelectorAll('td-card');
+          firstCard = cards[0];
+          secondCard = cards[1];
+          thirdCard = cards[2];
+          if(!secondCard) { return; }
+
+          bringCardUp(secondCard, amt, 4);
+          bringCardUp(thirdCard, amt, 8);
+          //console.log('Partial with', top);
+        };
       }
     }
   }])
