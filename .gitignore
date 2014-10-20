@@ -36,3 +36,5 @@ Icon
 .Trashes
 *~
 *.*sw*
+
+bower_components/
