@@ -252,7 +252,7 @@
       transclude: true,
       scope: {
         onSwipeLeft: '&',
-        onSwipeRipe: '&',
+        onSwipeRight: '&',
         onPartialSwipe: '&',
         onSnapBack: '&',
         onDestroy: '&'
