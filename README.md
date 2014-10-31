@@ -1,7 +1,7 @@
 Ionic Contrib: Tinder Cards
 ===================
 
-Swipeable tinder-style cards.
+Swipeable tinder-style cards. Check out the [Demo](http://codepen.io/ionic/pen/nxEdH)
 
 ## Usage
 
