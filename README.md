@@ -11,7 +11,9 @@ Include `ionic.tdcards.js` after the rest of your Ionic and Angular includes. Th
 
 ```html
 <td-cards>
-  <td-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)" on-partial-swipe="cardPartialSwipe(amt)" class="card-{{card.index}}" ng-controller="CardCtrl">
+  <td-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)"
+   on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)"
+   on-partial-swipe="cardPartialSwipe(amt)" class="card-{{card.index}}" ng-controller="CardCtrl">
 
     Card content here
   </td-card>
