@@ -1,9 +1,7 @@
-Ionic Contrib: Swipeable Cards
+Ionic Contrib: Tinder Cards
 ===================
 
-Swipeable card based layout for Ionic and Angular. As seen in apps like [Jelly](http://jelly.co/)
-
-[Demo](http://ionicframework.com/demos/swipe-cards/)
+Swipeable tinder-style cards.
 
 ## Usage
 
