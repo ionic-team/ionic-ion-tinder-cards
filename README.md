@@ -7,14 +7,14 @@ Swipeable card based layout for Ionic and Angular. As seen in apps like [Jelly](
 
 ## Usage
 
-Include `ionic.swipecards.js` after the rest of your Ionic and Angular includes. Then use the following AngularJS directives:
+Include `ionic.tdcards.js` after the rest of your Ionic and Angular includes. Then use the following AngularJS directives:
 
 ```html
-<swipe-cards>
-  <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-swipe="cardSwiped($index)">
+<td-cards>
+  <td-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-swipe="cardSwiped($index)">
     Card content here
-  </swipe-card>
-</swipe-cards>
+  </td-card>
+</td-cards>
 ```
 
 To add new cards dynamically, just add them to the cards array:
