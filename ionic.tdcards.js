@@ -133,7 +133,6 @@
       }
 
       var angle = Math.atan(e.gesture.deltaX / e.gesture.deltaY);
-      console.log('Finishing at angle', angle, 'and velocity', e.gesture.velocityX, e.gesture.velocityY);
 
       var dir = this.thresholdAmount < 0 ? -1 : 1;
       var targetX;
@@ -151,14 +150,10 @@
 
       var duration = 0.3 - Math.min(Math.max(Math.abs(e.gesture.velocityX)/10, 0.05), 0.2);
       
-      //console.log(e.gesture.velocityX/2, duration);
-      console.log('Duration', duration);
-
       ionic.requestAnimationFrame(function() {
         self.el.style.transform = self.el.style.webkitTransform = 'translate3d(' + targetX + 'px, ' + targetY + 'px,0) rotate(' + self.rotationAngle + 'rad)';
         self.el.style.transition = self.el.style.webkitTransition = 'all ' + duration + 's ease-in-out';
       });
-      console.log('DO DRAG END');
 
       //this.onSwipe && this.onSwipe();
 
@@ -182,7 +177,6 @@
           self._transformOriginLeft();
         }
         */
-        console.log('DRAG START');
         ionic.requestAnimationFrame(function() { self._doDragStart(e) });
       }, this.el);
 
@@ -211,7 +205,6 @@
       var width = this.el.offsetWidth;
       var point = window.innerWidth / 2 + this.rotationDirection * (width / 2)
       var distance = Math.abs(point - e.gesture.touches[0].pageX);// - window.innerWidth/2);
-      console.log(distance);
 
       this.touchDistance = distance * 10;
     },
@@ -321,7 +314,6 @@
               .start();
               /*
               animateSpringViaCss(el, 0, 0.5, 50, 700, 10, function (x) {
-                console.log('Mapper', x);
                 return el.style.transform = el.style.webkitTransform = 'translate3d(' + x + 'px,0,0)';
               });
               */
@@ -350,7 +342,6 @@
 
         var sortCards = function() {
           existingCards = $element[0].querySelectorAll('td-card');
-          console.log('Existing', existingCards);
 
           for(i = 0; i < existingCards.length; i++) {
             card = existingCards[i];
@@ -370,10 +361,7 @@
           var position, top, newTop;
           position = card.style.transform || card.style.webkitTransform;
           top = parseInt(position && position.split(',')[1] || 0);
-          //console.log(window.getComputedStyle(secondCard));
           newTop = Math.max(0, Math.min(max, max - (max * Math.abs(amt))));
-          //console.log(top);
-          console.log(newTop);
           card.style.transform = card.style.webkitTransform = 'translate3d(0, ' + newTop + 'px, 0)';
         };
 
@@ -386,7 +374,6 @@
 
           bringCardUp(secondCard, amt, 4);
           bringCardUp(thirdCard, amt, 8);
-          //console.log('Partial with', top);
         };
       }
     }
