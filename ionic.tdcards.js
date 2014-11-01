@@ -253,20 +253,25 @@
       compile: function(element, attr) {
         return function($scope, $element, $attr, swipeCards) {
           var el = $element[0];
-
+          var leftText = el.querySelector('.no-text');
+          var rightText = el.querySelector('.yes-text');
+          
           // Instantiate our card view
           var swipeableCard = new SwipeableCardView({
             el: el,
+            leftText: leftText,
+            rightText: rightText,
             onPartialSwipe: function(amt) {
               swipeCards.partial(amt);
+              var self = this;
               $timeout(function() {
-                $scope.leftTextOpacity = {
-                  'opacity': amt > 0 ? amt : 0
-                };
-                $scope.rightTextOpacity = {
-                  'opacity': amt < 0 ? Math.abs(amt) : 0
-                };
-
+                if (amt < 0) {
+                  self.leftText.style.opacity = Math.abs(amt) + 0.5;
+                  self.rightText.style.opacity = 0;
+                } else {
+                  self.leftText.style.opacity = 0;
+                  self.rightText.style.opacity = amt + 0.5;
+                }
                 $scope.onPartialSwipe({amt: amt});
               });
             },
@@ -308,8 +313,8 @@
               .on('step', function(v) {
                 //Have the element spring over 400px
                 el.style.transform = el.style.webkitTransform = 'translate3d(' + (startX - startX*v) + 'px, ' + (startY - startY*v) + 'px, 0) rotate(' + (startRotation - startRotation*v) + 'rad)';
-                rightText.style.opacity = Math.max(rightText.style.opacity - rightText.style.opacity * v, 0);
-                leftText.style.opacity = Math.max(leftText.style.opacity - leftText.style.opacity * v, 0);
+                rightText.style.opacity = 0;
+                leftText.style.opacity = 0;
               })
               .start();
               /*
