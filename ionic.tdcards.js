@@ -385,7 +385,7 @@
         $rootScope.$emit('tdCard.pop', isAnimated);
       },
       getSwipeableCard: function($scope) {
-        return $scope.$parent.swipeCard;
+        return $scope.swipeCard;
       }
     }
   }]);
