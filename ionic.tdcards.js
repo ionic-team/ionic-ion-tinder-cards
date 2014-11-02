@@ -132,6 +132,8 @@
         return;
       }
 
+      self.onTransitionOut(self.thresholdAmount);
+      
       var angle = Math.atan(e.gesture.deltaX / e.gesture.deltaY);
 
       var dir = this.thresholdAmount < 0 ? -1 : 1;
@@ -246,6 +248,9 @@
       scope: {
         onSwipeLeft: '&',
         onSwipeRight: '&',
+        onTransitionLeft: '&',
+        onTransitionRight: '&',
+        onTransitionOut: '&',
         onPartialSwipe: '&',
         onSnapBack: '&',
         onDestroy: '&'
@@ -278,6 +283,26 @@
             onSwipeLeft: function() {
               $timeout(function() {
                 $scope.onSwipeLeft();
+              });
+            },
+            onTransitionRight: function() {
+              $timeout(function() {
+                $scope.onTransitionRight();
+              });
+            },
+            onTransitionLeft: function() {
+              $timeout(function() {
+                $scope.onTransitionLeft();
+              });
+            },
+            onTransitionOut: function(amt) {
+              if (amt < 0) {
+                swipeableCard.onTransitionLeft();
+              } else {
+                swipeableCard.onTransitionRight();
+              }
+              $timeout(function() {
+                $scope.onTransitionOut({amt: amt});
               });
             },
             onDestroy: function() {
