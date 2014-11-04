@@ -3,7 +3,7 @@ Ionic Contrib: Swipeable Cards
 
 Swipeable card based layout for Ionic and Angular. As seen in apps like [Jelly](http://jelly.co/)
 
-[Demo](http://ionicframework.com/demos/swipe-cards/)
+[Demo](http://codepen.io/ionic/pen/nxEdH)
 
 ## Usage
 
