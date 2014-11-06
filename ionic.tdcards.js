@@ -116,6 +116,13 @@
     swipe: function() {
       this.transitionOut();
     },
+    
+    /**
+     * Snap the card back to its original position
+     */
+    snapBack: function() {
+      this.onSnapBack(this.x, this.y, this.rotationAngle);
+    },
 
     isUnderThreshold: function() {
       //return true;
