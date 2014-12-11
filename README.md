@@ -22,8 +22,12 @@ To add new cards dynamically, just add them to the cards array:
 
 ```javascript
 $scope.cards = [
-  { // card 1 },
-  { // card 2 }
+  { 
+    // card 1 
+  },
+  { 
+    // card 2 
+  }
 ];
 
 $scope.addCard = function() {
