@@ -287,6 +287,9 @@
           var leftText = el.querySelector('.no-text');
           var rightText = el.querySelector('.yes-text');
           
+          // Force hardware acceleration for animation - better performance on first touch
+          el.style.transform = el.style.webkitTransform = 'translate3d(0px, 0px, 0px)';
+
           // Instantiate our card view
           var swipeableCard = new SwipeableCardView({
             el: el,
