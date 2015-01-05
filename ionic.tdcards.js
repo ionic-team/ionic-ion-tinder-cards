@@ -238,6 +238,23 @@
   angular.module('ionic.contrib.ui.tinderCards', ['ionic'])
 
   .directive('tdCard', ['$timeout', function($timeout) {
+    /**
+     * A simple non-linear fade function for the text on each card
+     */
+    var fadeFn = function(t) {
+      // Speed up time to ramp up quickly
+      t = Math.min(1, t * 3);
+
+      // This is a simple cubic bezier curve.
+      // http://cubic-bezier.com/#.11,.67,.41,.99
+      var c1 = 0.11,
+          c2 = 0.67,
+          c3 = 0.41,
+          c4 = 0.99;
+
+      return Math.pow((1 - t), 3)*c1 + 3*Math.pow((1 -  t), 2)*t*c2 + 3*(1 - t)*t*t*c3 + Math.pow(t, 3)*c4;
+    };
+
     return {
       restrict: 'E',
       template: '<div class="swipe-card" ng-transclude></div>',
@@ -266,11 +283,11 @@
               var self = this;
               $timeout(function() {
                 if (amt < 0) {
-                  self.leftText.style.opacity = Math.abs(amt) + 0.5;
+                  self.leftText.style.opacity = fadeFn(-amt);
                   self.rightText.style.opacity = 0;
                 } else {
                   self.leftText.style.opacity = 0;
-                  self.rightText.style.opacity = amt + 0.5;
+                  self.rightText.style.opacity = fadeFn(amt);
                 }
                 $scope.onPartialSwipe({amt: amt});
               });
