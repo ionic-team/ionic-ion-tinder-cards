@@ -419,9 +419,8 @@
         });
 
         var bringCardUp = function(card, amt, max) {
-          var position, top, newTop;
+          var position, newTop;
           position = card.style.transform || card.style.webkitTransform;
-          top = parseInt(position && position.split(',')[1] || 0);
           newTop = Math.max(0, Math.min(max, max - (max * Math.abs(amt))));
           card.style.transform = card.style.webkitTransform = 'translate3d(0, ' + newTop + 'px, 0)';
         };
