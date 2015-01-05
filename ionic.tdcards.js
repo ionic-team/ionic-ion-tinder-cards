@@ -429,10 +429,9 @@
           firstCard = cards[0];
           secondCard = cards[1];
           thirdCard = cards[2];
-          if(!secondCard) { return; }
 
-          bringCardUp(secondCard, amt, 4);
-          bringCardUp(thirdCard, amt, 8);
+          secondCard && bringCardUp(secondCard, amt, 4);
+          thirdCard && bringCardUp(thirdCard, amt, 8);
         };
       }
     }
