@@ -33,7 +33,7 @@ angular.module('starter', ['ionic', 'ionic.contrib.ui.tinderCards'])
   $scope.addCard = function() {
     var newCard = cardTypes[Math.floor(Math.random() * cardTypes.length)];
     newCard.id = Math.random();
-    $scope.cards.push(angular.extend({}, newCard));
+    $scope.cards.unshift(angular.extend({}, newCard));
   }
   
   $scope.cards = [];
