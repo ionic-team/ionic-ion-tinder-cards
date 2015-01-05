@@ -266,7 +266,7 @@
 
     return {
       restrict: 'E',
-      template: '<div class="swipe-card" ng-transclude></div>',
+      template: '<div class="td-card" ng-transclude></div>',
       require: '^tdCards',
       transclude: true,
       scope: {
