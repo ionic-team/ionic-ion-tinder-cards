@@ -7,7 +7,7 @@ Swipeable card based layout for Ionic and Angular. As seen in apps like [Jelly](
 
 ## Usage
 
-Include `ionic.tdcards.js` after the rest of your Ionic and Angular includes. Then use the following AngularJS directives:
+Include `ionic.tdcards.js` and `ionic.tdcards.css` after the rest of your Ionic and Angular includes. Add `ionic.contrib.ui.tinderCards` as a module dependency of your app. Then use the following AngularJS directives:
 
 ```html
 <td-cards>
