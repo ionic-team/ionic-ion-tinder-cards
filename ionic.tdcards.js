@@ -396,7 +396,7 @@
       template: '<div class="td-cards" ng-transclude></div>',
       transclude: true,
       scope: {},
-      controller: function($scope, $element) {
+      controller: ['$scope', '$element', function($scope, $element) {
         var cards;
         var firstCard, secondCard, thirdCard;
 
@@ -437,7 +437,7 @@
           secondCard && bringCardUp(secondCard, amt, 4);
           thirdCard && bringCardUp(thirdCard, amt, 8);
         };
-      }
+      }]
     }
   }])
 
