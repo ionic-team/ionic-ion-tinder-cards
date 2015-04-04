@@ -300,11 +300,11 @@
               var self = this;
               $timeout(function() {
                 if (amt < 0) {
-                  self.leftText.style.opacity = fadeFn(-amt);
-                  self.rightText.style.opacity = 0;
+                  if (self.leftText) self.leftText.style.opacity = fadeFn(-amt);
+                  if (self.rightText) self.rightText.style.opacity = 0;
                 } else {
-                  self.leftText.style.opacity = 0;
-                  self.rightText.style.opacity = fadeFn(amt);
+                  if (self.leftText) self.leftText.style.opacity = 0;
+                  if (self.rightText) self.rightText.style.opacity = fadeFn(amt);
                 }
                 $scope.onPartialSwipe({amt: amt});
               });
@@ -367,8 +367,8 @@
               .on('step', function(v) {
                 //Have the element spring over 400px
                 el.style.transform = el.style.webkitTransform = 'translate3d(' + (startX - startX*v) + 'px, ' + (startY - startY*v) + 'px, 0) rotate(' + (startRotation - startRotation*v) + 'rad)';
-                rightText.style.opacity = 0;
-                leftText.style.opacity = 0;
+                if (rightText) rightText.style.opacity = 0;
+                if (leftText) leftText.style.opacity = 0;
               })
               .start();
 
