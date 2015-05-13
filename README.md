@@ -12,7 +12,7 @@ Note: There is also a similar ion library here: https://github.com/driftyco/ioni
 
 ## Usage
 
-Include `ionic.tdcards.js` and `ionic.tdcards.css` after the rest of your Ionic and Angular includes. Add `ionic.contrib.ui.tinderCards` as a module dependency of your app. Then use the following AngularJS directives:
+Include `ionic.tdcards.js`, `collide.js` and `ionic.tdcards.css` after the rest of your Ionic and Angular includes. Add `ionic.contrib.ui.tinderCards` as a module dependency of your app. Then use the following AngularJS directives:
 
 ```html
 <td-cards>
